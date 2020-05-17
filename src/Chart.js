@@ -24,7 +24,7 @@ class Chart extends Component {
     const API_Call = "https://opendata.resas-portal.go.jp/api/v1/prefectures";
 
     fetch(API_Call, {
-    //リクエストヘッダーにX-API-KEYを含める
+      //リクエストヘッダーにX-API-KEYを含める
       headers: { "X-API-KEY": APIKEY },
     })
       .then((response) => response.json())
@@ -39,14 +39,12 @@ class Chart extends Component {
 
     if (!this.state.selected[index]) {
       fetch(
-        `https://opendata.resas-portal.go.jp/api/v1/population/sum/perYear?cityCode=-&prefCode=${
-          index + 1
-        }`,
+        "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=",
         {
           headers: { "X-API-KEY": APIKEY },
         }
       )
-        .then((response) => response.json())
+        .then((response) => response.data.result.data[0].data)
         .then((res) => {
           const tmp = [];
           Object.keys(res.result.line.data).forEach((i) => {
