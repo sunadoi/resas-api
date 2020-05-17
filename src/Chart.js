@@ -30,7 +30,8 @@ class Chart extends Component {
       .then((response) => response.json())
       .then((res) => {
         this.setState({ prefectures: res.result });
-      });
+      })
+      .catch((error) => console.error(error));
   }
 
   _changeSelection(index) {
@@ -39,17 +40,18 @@ class Chart extends Component {
 
     if (!this.state.selected[index]) {
       fetch(
-        "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?prefCode=",
-        {
-          headers: { "X-API-KEY": APIKEY },
-        }
+        "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=&prefCode=",
+        { headers: { "X-API-KEY": APIKEY } }
       )
-        .then((response) => response.data.result.data[0].data)
+        .then((response) => response.data.data.value)
         .then((res) => {
           const tmp = [];
-          Object.keys(res.result.line.data).forEach((i) => {
-            tmp.push(res.result.line.data[i].value);
+          Object.keys(res.result.data).forEach((i) => {
+            tmp.push(res.result.data[i].value);
+
+            console.log(tmp);
           });
+
           const res_series = {
             name: this.state.prefectures[index].prefName,
             data: tmp,
