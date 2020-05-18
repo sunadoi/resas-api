@@ -45,18 +45,15 @@ class Chart extends React.Component {
         .then((res) => {
           const populations = [];
           const populationsYears = [];
-          // Object.keys(res.result.data[0]).forEach((i) => {
           res.result.data[0].data.forEach((value, i) => {
-            // console.log(i);
-            // console.log(value);
+            console.log(i);
+            console.log(value);
 
             console.log(res.result.data[0].data[i] === value);
             populations.push(value["value"]);
             populationsYears.push(value["year"]);
           });
-          console.log(populations.tmpYears);
 
-          console.log(this.state.series);
           const res_series = {
             name: this.state.prefectures[index].prefName,
             data: populations,
@@ -110,12 +107,28 @@ class Chart extends React.Component {
           label: {
             connectorAllowed: false,
           },
-          pointInterval: 10,
           pointStart: 1980,
         },
       },
       xAxis: {
         categories: this.state.categoeis,
+        title: {
+          text: "年",
+        },
+        max: 2020,
+        tickInterval: 10,
+      },
+      yAxis: {
+        categories: this.state.categoeis,
+        title: {
+          text: "人口数",
+        },
+
+        labels: {
+          formatter: function () {
+            return Highcharts.numberFormat(this.value, 0, ",", ",");
+          },
+        },
       },
       series: this.state.series,
     };
