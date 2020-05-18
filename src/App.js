@@ -4,7 +4,7 @@ import Chart from "./Chart";
 function App() {
   return (
     <div className="App">
-      <Chart></Chart>
+      <Chart />
     </div>
   );
 }
