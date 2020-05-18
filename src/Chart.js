@@ -123,6 +123,11 @@ class Chart extends React.Component {
         title: {
           text: "人口数",
         },
+        legend: {
+          layout: "vertical",
+          align: "right",
+          verticalAlign: "middle",
+        },
 
         labels: {
           formatter: function () {
