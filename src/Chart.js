@@ -3,7 +3,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import APIKEY from "./Apikey";
 
-class Chart extends Component {
+class Chart extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -16,7 +16,6 @@ class Chart extends Component {
 
   componentDidMount() {
     this.fetchChart();
-    this._changeSelection = this._changeSelection.bind(this);
   }
 
   fetchChart() {
@@ -44,28 +43,28 @@ class Chart extends Component {
       )
         .then((response) => response.json())
         .then((res) => {
-          const tmp = [];
-          const tmpYears = [];
+          const populations = [];
+          const populationsYears = [];
           // Object.keys(res.result.data[0]).forEach((i) => {
           res.result.data[0].data.forEach((value, i) => {
             // console.log(i);
             // console.log(value);
 
             console.log(res.result.data[0].data[i] === value);
-            tmp.push(value["value"]);
-            tmpYears.push(value["year"]);
+            populations.push(value["value"]);
+            populationsYears.push(value["year"]);
           });
-          console.log(tmp, tmpYears);
+          console.log(populations.tmpYears);
 
           console.log(this.state.series);
           const res_series = {
             name: this.state.prefectures[index].prefName,
-            data: tmp,
+            data: populations,
           };
           this.setState({
             selected: selected_copy,
             series: [...this.state.series, res_series],
-            categories: tmpYears,
+            categories: populationsYears,
           });
         });
     } else {
@@ -73,7 +72,7 @@ class Chart extends Component {
       const series_copy = this.state.series.slice();
 
       for (let i = 0; i < series_copy.length; i++) {
-        if (series_copy[i].name == this.state.prefectures[index].prefName) {
+        if (series_copy[i].name === this.state.prefectures[index].prefName) {
           series_copy.splice(i, 1);
         }
       }
@@ -101,7 +100,7 @@ class Chart extends Component {
   }
 
   render() {
-    const obj = this.state.prefectures;
+    const prefectures = this.state.prefectures;
     const options = {
       title: {
         text: "都道府県",
@@ -124,7 +123,9 @@ class Chart extends Component {
       <div style={{ margin: "30px" }}>
         <h1>都道府県別の総人口推移グラフ</h1>
 
-        {Object.keys(obj).map((i) => this.renderItem(obj[i]))}
+        {Object.keys(prefectures).map((prefecture) =>
+          this.renderItem(prefectures[prefecture])
+        )}
         <HighchartsReact highcharts={Highcharts} options={options} />
       </div>
     );
