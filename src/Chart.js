@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-
-const APIKEY = "R6LK9gI6EP4ee8dJG6Fi92UVF3SZJ3kqQtIxlosQ";
+import APIKEY from "./Apikey";
 
 class Chart extends Component {
   constructor() {
@@ -11,6 +10,7 @@ class Chart extends Component {
       selected: Array(47).fill(false),
       prefectures: {},
       series: [],
+      categories: [],
     };
   }
 
@@ -40,18 +40,25 @@ class Chart extends Component {
 
     if (!this.state.selected[index]) {
       fetch(
-        "https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=&prefCode=",
+        `https://opendata.resas-portal.go.jp/api/v1/population/composition/perYear?cityCode=-&prefCode=${index}`,
         { headers: { "X-API-KEY": APIKEY } }
       )
-        .then((response) => response.data.data.value)
+        .then((response) => response.json())
         .then((res) => {
           const tmp = [];
-          Object.keys(res.result.data).forEach((i) => {
-            tmp.push(res.result.data[i].value);
+          const tmpYears = [];
+          // Object.keys(res.result.data[0]).forEach((i) => {
+          res.result.data[0].data.forEach((value, i) => {
+            // console.log(i);
+            // console.log(value);
 
-            console.log(tmp);
+            console.log(res.result.data[0].data[i] === value);
+            tmp.push(value["value"]);
+            tmpYears.push(value["year"]);
           });
+          console.log(tmp, tmpYears);
 
+          console.log(this.state.series);
           const res_series = {
             name: this.state.prefectures[index].prefName,
             data: tmp,
@@ -59,6 +66,7 @@ class Chart extends Component {
           this.setState({
             selected: selected_copy,
             series: [...this.state.series, res_series],
+            categories: tmpYears,
           });
         });
     } else {
@@ -107,6 +115,9 @@ class Chart extends Component {
           pointInterval: 10,
           pointStart: 1980,
         },
+      },
+      xAxis: {
+        categories: this.state.categoeis,
       },
       series: this.state.series,
     };
