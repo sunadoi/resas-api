@@ -3,6 +3,8 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import APIKEY from "./Apikey";
 
+//test
+
 class Chart extends React.Component {
   constructor() {
     super();
